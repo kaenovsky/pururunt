@@ -1,52 +1,22 @@
-# 🎬 cineee.ar - Work in Progress
+# Pururunt
 
-## 📋 **PROYECTO**
-API que disponibiliza la cartelera de cines alternativos de Buenos Aires.
+Cartelera unificada del circuito de cine alternativo de Buenos Aires.
 
-## 🚀 **ESTADO ACTUAL - MVP FUNCIONAL**
+### Stack
 
-### ✅ **IMPLEMENTADO**
-- **Backend n8n + PostgreSQL**: Flujo automatizado email → parser → BD
-- **Parser Cacodelphia**: Extracción robusta de datos de newsletters
-- **Frontend Next.js 16 + TypeScript**: Interfaz moderna y tipada
-- **API REST**: Endpoints para consultar screenings
-- **Generador iCal**: Exportación a calendarios (Google/Apple/Outlook)
-- **Base de datos Railway**: PostgreSQL en la nube
+- **Frontend:** Next.js 16 (App Router), Tailwind CSS v4.
+- **Data:** PostgreSQL, Drizzle ORM.
+- **Scrapping de carteleras:** n8n on Railway.
+- **Deploy:** Vercel.
 
-### 🛠️ **FUNCIONALIDADES ACTIVAS**
-- 📊 Visualización de cartelera agrupada por fecha
-- 🎪 Filtrado por cine
-- 📥 Descarga de archivos .ics para calendarios
-- 📱 UI básica responsive
-- 🔄 Actualización automática vía newsletters
+### Features
 
-### 🎯 **PRÓXIMOS PASOS**
-1. **Parser Cine Lorca** - Integración de segunda fuente (OCR + GPT)
-2. **Deploy Vercel** - Dominio cineee.ar en producción
-3. **Más cines** - Gaumont, Cosmos, York
-4. **Mejoras UI** - Experiencia mejorada
+- **Agenda Unificada:** Todas las funciones ordenadas cronológicamente.
+- **Exportación:** Botón para agregar funciones a un calendario (iCal).
+- **Filtros:** Por cine o por película.
 
-## 🏗️ **ARQUITECTURA**
-```
-Email Newsletter → n8n Workflow → PostgreSQL → Next.js Frontend → iCal Export
-```
+### Posibles cines a incluir
 
-## 📊 **DATOS ACTUALES**
-- ✅ **Cacodelphia**: Completamente integrado
-- 🚧 **Cine Lorca**: En desarrollo
-- 📋 **Cine Gaumont**: Próximamente
-- 📋 **Cosmos UBA**: Próximamente
-- 📋 **York Cine**: Próximamente
-
-## 💻 **STACK**
-- **Frontend**: Next.js 16, TypeScript, React
-- **Backend**: n8n, PostgreSQL, Railway
-- **Parser**: JavaScript, Regex, Date manipulation
-- **Deploy**: Vercel (próximamente)
-
-## 🎪 **CINES SOPORTADOS**
-El proyecto parsea newsletters oficiales de cines alternativos para obtener datos estructurados de funciones, horarios y sinopsis.
-
----
-
-**📌 Nota**: Proyecto en desarrollo activo. MVP local funcionando, expandiendo a más cines y mejoras de UX.
+- **Gaumont**
+- **Cine York**
+- **Sala lugones**
