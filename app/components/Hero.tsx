@@ -1,9 +1,10 @@
-import { Star } from 'lucide-react'
-import Link from 'next/link';
+import { Star, Clock, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
 interface HeroProps { movies: any[] }
 
 export default function Hero({ movies }: HeroProps) {
+  
   const heroMovies = Array.from(new Map(movies.map(m => [m.title, m])).values())
     .filter((m: any) => m.poster)
     .slice(0, 1);
@@ -12,56 +13,72 @@ export default function Hero({ movies }: HeroProps) {
   const movie = heroMovies[0];
 
   return (
-    <section className="relative w-full py-10 md:py-14 border-b border-neutral-100 bg-white">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row gap-6 md:gap-10">
+    <section className="relative w-full overflow-hidden border-b border-sepia-border bg-black">
+    
+      <div className="absolute inset-0 z-0">
         
-        <div className="w-40 md:w-56 shrink-0 mx-auto md:mx-0 shadow-2xl rounded-sm overflow-hidden self-start">
-          <Link
-          href={`/film/${movie.movie_id}`} 
-          className="block">
-           <img 
-            src={movie.poster} 
-            alt={movie.title} 
-            className="w-full h-auto object-cover"
-          />
-          </Link>
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-70 blur-lg scale-110"
+          style={{ backgroundImage: `url(${movie.poster})` }}
+        />
+        
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row items-end gap-8">
+        
+        <div className="w-32 md:w-48 shrink-0 shadow-[0_0_20px_rgba(255,255,255,0.1)] rounded-sm overflow-hidden border border-white/10">
+           <Link href={`/film/${movie.movie_id}`}>
+             <img 
+              src={movie.poster} 
+              alt={movie.title} 
+              className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+            />
+           </Link>
         </div>
         
-        <div className="flex-1 flex flex-col text-center md:text-left h-full min-h-[280px]">
+        <div className="flex-1 flex flex-col text-left text-white">
           
           <div className="mb-4">
-            <span className="inline-block px-2 py-1 mb-3 text-[10px] font-bold tracking-widest uppercase bg-rose-50 text-rose-600 rounded-sm">
-              Destacado de la semana
+            <span className="inline-block px-3 py-1 text-[10px] font-bold tracking-widest uppercase bg-accent text-white rounded-sm shadow-sm">
+              Destacado
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif-display font-bold leading-[0.95] text-neutral-900 tracking-tight">
-              {movie.title}
-            </h2>
           </div>
           
-          <div className="flex-1 mb-6">
-             <p className="text-neutral-500 leading-relaxed text-sm md:text-base max-w-2xl mx-auto md:mx-0 line-clamp-4">
-              {movie.overview}
-            </p>
-          </div>
-
-          <div className="mt-auto pt-4 border-t border-neutral-100 md:border-none flex flex-wrap justify-center md:justify-start items-center gap-4 text-sm font-medium text-neutral-600">
+          <Link href={`/film/${movie.movie_id}`} className="group">
+            <h2 className="text-4xl md:text-6xl font-black leading-[0.9] mb-4 tracking-tight group-hover:text-amber-200 transition-colors">
+              {movie.title}
+            </h2>
+          </Link>
+          
+          <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-white/80 mb-4">
             {movie.vote_average && (
-              <span className="flex items-center gap-1.5 text-black bg-neutral-100 px-2 py-1 rounded-md">
-                <Star size={14} className="text-yellow-500 fill-yellow-500" /> 
-                {Number(movie.vote_average).toFixed(1)}
+              <span className="flex items-center gap-1 text-amber-400">
+                <Star size={14} fill="currentColor" /> {Number(movie.vote_average).toFixed(1)}
               </span>
             )}
-            
             {movie.duration && (
               <span className="flex items-center gap-1">
-                {movie.duration} min
+                <Clock size={14} /> {movie.duration} min
               </span>
             )}
-            
-            <span className="hidden md:inline text-neutral-300">|</span>
-            <span className="uppercase text-xs tracking-wider text-neutral-400">
-              Disponible en cartelera
+            <span className="text-white/40">|</span>
+            <span className="uppercase text-xs tracking-wider text-white/60">
+              {movie.director || "Cartelera"}
             </span>
+          </div>
+
+          <div className="max-w-2xl">
+             <p className="text-white/80 leading-relaxed text-sm md:text-base line-clamp-4 mb-4 font-light">
+              {movie.overview}
+            </p>
+            
+            <Link 
+              href={`/film/${movie.movie_id}`}
+              className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:text-amber-300 transition-colors border-b border-transparent hover:border-amber-300 pb-0.5"
+            >
+              Leer más <ArrowRight size={14} />
+            </Link>
           </div>
 
         </div>

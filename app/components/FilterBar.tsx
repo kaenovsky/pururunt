@@ -5,7 +5,6 @@ export default function FilterBar({ cinemas, movies, selectedCinema, selectedMov
     <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-sm border-b border-neutral-100 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 py-3 flex gap-2 sm:gap-3">
         
-        {/* Select Cine: flex-1 para ocupar espacio equitativo */}
         <div className="relative flex-1">
           <select 
             value={selectedCinema} 
@@ -18,7 +17,6 @@ export default function FilterBar({ cinemas, movies, selectedCinema, selectedMov
           <Filter className="absolute right-2.5 top-2.5 text-neutral-400 pointer-events-none" size={12} />
         </div>
 
-        {/* Select Película */}
         <div className="relative flex-1">
           <select 
             value={selectedMovie} 
