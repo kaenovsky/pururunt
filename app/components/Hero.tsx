@@ -27,7 +27,7 @@ export default function Hero({ movies }: HeroProps) {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-20 flex flex-col md:flex-row items-end gap-8">
         
-        <div className="w-32 md:w-48 shrink-0 shadow-[0_0_20px_rgba(255,255,255,0.1)] rounded-sm overflow-hidden border border-white/10">
+        <div className="w-32 md:w-48 shrink-0 shadow-[0_0_20px_rgba(255,255,255,0.1)] rounded-sm overflow-hidden border border-white/10 mx-auto md:mx-0">
            <Link href={`/film/${movie.movie_id}`}>
              <img 
               src={movie.poster} 
