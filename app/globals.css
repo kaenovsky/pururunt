@@ -1,33 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  /* Definimos colores semánticos para usarlos como clases */
-  --color-background: #ffffff;
-  --color-foreground: #000000;
-  --color-muted: #737373; /* Neutral-500 para textos secundarios */
-  --color-border: #e5e5e5; /* Neutral-200 para líneas finas */
-}
-
-/* Estilos Base */
-:root {
-  --font-serif-display: 'Georgia', 'Times New Roman', Times, serif;
+  --color-background: #FFFCF5;
+  --color-foreground: #1a1a1a;
+  
+  --color-accent: #D97706;
+  --color-accent-glow: #F59E0B;
+  
+  --color-sepia-light: #F3F0E6;
+  --color-sepia-border: #E5E0D0;
+  
+  --color-muted: #78716c;
+  
+  --font-montserrat: var(--font-montserrat);
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  /* Renderizado de fuentes nítido para fondo blanco */
+  font-family: var(--font-montserrat), sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tipografía Serif para Títulos */
-.font-serif-display {
-  font-family: var(--font-serif-display);
-  letter-spacing: -0.03em;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat), sans-serif;
+  letter-spacing: -0.02em;
 }
 
-/* Utilidad para ocultar scrollbar */
+.font-logo {
+  font-family: var(--font-logo), cursive;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
