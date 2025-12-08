@@ -1,16 +1,37 @@
 import { getScreeningById } from '@/lib/db'
-import { Calendar, ExternalLink, Clock, Star, ArrowLeft, Ticket } from 'lucide-react'
+import { Calendar, Clock, Star, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import { notFound } from 'next/navigation'
 
+import ScreeningModalTrigger from '@/app/components/ScreeningModalTrigger'; 
+
 export const revalidate = 3600
 
-export default async function FilmPage({ params }: { params: Promise<{ id: string }> }) {
+interface ScreeningData {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  duration?: number | null;
+  cinema: string;
+  room?: string | null;
+  rating?: string | null;
+  format?: string | null;
+  overview?: string | null;
+  tmdb_id?: number | null;
+  poster?: string | null;
+  vote_average?: number | null;
+  movie_id?: number;
+  director?: string | null;
+  country?: string | null;
+}
+
+export default async function ScreeningPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   
-  const screening = await getScreeningById(id)
+  const screening = await getScreeningById(id) as ScreeningData | null
 
   if (!screening) {
     notFound()
@@ -25,10 +46,6 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       year: 'numeric'
     })
   }
-
-  const letterboxdUrl = screening.tmdb_id 
-    ? `https://letterboxd.com/tmdb/${screening.tmdb_id}`
-    : `https://letterboxd.com/search/${encodeURIComponent(screening.title)}`;
 
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-rose-100 selection:text-rose-900">
@@ -132,30 +149,19 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
                   )}
                 </div>
 
-                {/* Agregar a calendario */}
-                <a 
-                  href={`/api/ical/${screening.id}`}
-                  className="w-full sm:w-auto px-6 py-4 bg-black text-white text-base font-medium rounded-md hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                  download
-                >
-                  <Calendar size={18} />
-                  Agregar a mi calendario
-                </a>
+                {/* Acciones*/}
+                <ScreeningModalTrigger screening={screening}>
+                  <button 
+                    className="w-full sm:w-auto px-6 py-4 bg-black text-white text-base font-medium rounded-md hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                    title="Opciones para agendar"
+                  >
+                    <Calendar size={18} />
+                    Agendar o compartir función
+                  </button>
+                </ScreeningModalTrigger>
+                
               </div>
             </section>
-
-            {/* Botones secundarios */}
-            <div className="mt-auto flex flex-col sm:flex-row gap-4">
-              <a 
-                href={letterboxdUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 rounded-md text-neutral-700 hover:border-black hover:text-black transition-colors font-medium"
-              >
-                <ExternalLink size={18} />
-                Ver en Letterboxd
-              </a>
-            </div>
 
           </article>
         </div>

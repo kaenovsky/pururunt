@@ -1,10 +1,8 @@
-import { Star, ExternalLink, Calendar } from 'lucide-react'
-import Link from 'next/link';
+import { Star } from 'lucide-react'
+import Link from 'next/link'
+import ScreeningModalTrigger from './ScreeningModalTrigger'
 
 export default function ScreeningCard({ screening }: { screening: any }) {
-  const letterboxdUrl = screening.tmdb_id 
-    ? `https://letterboxd.com/tmdb/${screening.tmdb_id}`
-    : `https://letterboxd.com/search/${encodeURIComponent(screening.title)}`;
 
   return (
     <div className="group flex flex-col h-full">
@@ -37,9 +35,21 @@ export default function ScreeningCard({ screening }: { screening: any }) {
 
       {/* INFO */}
       <div className="mt-3 flex flex-col gap-1">
-        <div className="text-[10px] uppercase tracking-wider text-neutral-500 font-medium truncate">
-          {screening.director ? screening.director : screening.country}
+  
+        <div className="text-[10px] uppercase tracking-wider text-neutral-500 font-medium truncate h-3.5 leading-none">
+          {/*
+            Lógica de visualización: 
+            1. Si hay director, lo muestra.
+            2. Si no hay director, pero hay país, muestra el país.
+            3. Si no hay ninguno, el div está vacío, pero mantiene su altura (h-3.5)
+              gracias al 'leading-none', evitando que el título se mueva.
+          */}
+          {screening.director 
+            ? screening.director 
+            : screening.country
+          }
         </div>
+        
         <h3 className="text-sm font-bold leading-tight text-black line-clamp-1" title={screening.title}>
           {screening.title}
         </h3>
@@ -52,28 +62,22 @@ export default function ScreeningCard({ screening }: { screening: any }) {
           <span className="font-medium text-black bg-neutral-100 px-1.5 py-0.5 rounded">
             {screening.time} hs
           </span>
+
           {screening.duration && <span>{screening.duration} min</span>}
         </div>
 
         {/* Acciones */}
-        <div className="flex gap-4 mt-2">
-          <a 
-            href={`/api/ical/${screening.id}`}
-            className="text-neutral-400 hover:text-black transition-colors"
-            title="Agendar"
-          >
-            <Calendar size={14} />
-          </a>
-          <a 
-            href={letterboxdUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-neutral-400 hover:text-green-600 transition-colors"
-            title="Ver en Letterboxd"
-          >
-            <ExternalLink size={14} />
-          </a>
+        <div className="mt-2">          
+          <ScreeningModalTrigger screening={screening}>
+            <button
+              className="w-full flex items-center justify-center gap-2 bg-neutral-100 py-2 px-4 rounded-lg text-sm font-semibold text-neutral-600 hover:bg-amber-100 hover:text-amber-800 transition-all duration-300 ease-in-out transform hover:scale-[1.01] active:scale-[0.99] outline-none shadow-sm"
+              title="Me interesa 👀"
+            >              
+              <span className="text-lg leading-none">💡</span>
+            </button>
+          </ScreeningModalTrigger>
         </div>
+
       </div>
     </div>
   )
