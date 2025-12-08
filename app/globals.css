@@ -38,3 +38,33 @@ h1, h2, h3, h4, h5, h6 {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.btn-action-minimal {
+  @apply 
+      w-full 
+      flex 
+      items-center 
+      gap-3 
+      p-3 
+      text-left 
+      rounded-lg 
+      transition-all 
+      duration-200 
+      text-sm 
+      font-medium 
+      outline-none;
+}
+
+.btn-action-minimal {
+  @apply 
+      bg-neutral-50 
+      text-neutral-800;
+}
+
+.btn-action-minimal:hover {
+  @apply 
+      bg-amber-100 
+      text-amber-700 
+      transform 
+      scale-[1.005];
+}
