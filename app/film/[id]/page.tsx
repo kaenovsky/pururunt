@@ -27,8 +27,12 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
       <Navbar />
 
       <main className="max-w-5xl mx-auto px-4 py-8 md:py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-black mb-8 transition-colors">
-          <ArrowLeft size={16} /> Volver
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-black mb-8 transition-colors group"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          Ir a la cartelera
         </Link>
 
         <div className="flex flex-col md:flex-row gap-10">
@@ -132,10 +136,10 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                           </div>
                           <div className="flex items-center gap-1.5 text-sm text-neutral-600">
                             <MapPin size={14} />
-                            <span className={s.cinema.toLowerCase().includes('lorca') ? 'text-rose-700 font-medium' : 'text-neutral-700'}>
+                            <span className={s.cinema.toLowerCase()}>
                               {s.cinema}
                             </span>
-                            {s.room && <span className="text-neutral-400">· Sala {s.room}</span>}
+                            {s.room && <span className="text-neutral-400"></span>}
                           </div>
                         </div>
                       </div>
