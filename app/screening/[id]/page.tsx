@@ -41,7 +41,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-black mb-8 transition-colors group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          Volver a la cartelera
+          Ir a la cartelera
         </Link>
 
         <div className="flex flex-col md:flex-row gap-10 lg:gap-16">
@@ -50,17 +50,19 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           <aside className="w-full md:w-1/3 lg:w-1/4 shrink-0">
             <div className="sticky top-24">
               <div className="relative aspect-2/3 rounded-sm overflow-hidden bg-neutral-100 shadow-2xl mb-6">
-                {screening.poster ? (
-                  <img 
-                    src={screening.poster} 
-                    alt={screening.title} 
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center p-6 text-center border border-neutral-200">
-                    <span className="font-serif-display text-2xl text-neutral-400 italic">{screening.title}</span>
-                  </div>
-                )}
+                <Link href={`/film/${screening.movie_id}`}>
+                  {screening.poster ? (
+                    <img 
+                      src={screening.poster} 
+                      alt={screening.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center p-6 text-center border border-neutral-200">
+                      <span className="font-serif-display text-2xl text-neutral-400 italic">{screening.title}</span>
+                    </div>
+                  )}
+                </Link>
               </div>
 
               {/* Data técnica */}
@@ -113,16 +115,15 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             <section className="bg-neutral-50 border border-neutral-200 rounded-lg p-6 mb-10">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-rose-600 mb-1">Tu Función Seleccionada</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-rose-600 mb-1">Función Seleccionada</h3>
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-2xl font-bold capitalize text-neutral-900">{formatDateFull(screening.date)}</span>
+                    <span className="text-2xl font-bold text-neutral-900">{formatDateFull(screening.date)}</span>
                   </div>
                   <div className="flex items-center gap-2 text-lg text-neutral-600">
                     <Clock size={20} className="text-neutral-400" />
                     <span className="font-medium text-black">{screening.time} hs</span>
                     <span className="text-neutral-300">|</span>
                     <span className="font-medium">{screening.cinema}</span>
-                    {screening.room && <span className="text-neutral-400 text-sm">(Sala {screening.room})</span>}
                   </div>
                   {screening.format && (
                     <div className="mt-3 inline-block px-2 py-1 bg-white border border-neutral-200 text-xs font-medium uppercase rounded">
