@@ -28,6 +28,7 @@ export const movies = pgTable('movies', {
   tmdbId: integer('tmdb_id'),
   director: text('director'),
   country: text('country'),
+  isFeatured: boolean('is_featured'),
 });
 
 export const screenings = pgTable('screenings', {
