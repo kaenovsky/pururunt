@@ -13,10 +13,8 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <Hero />
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <HomeClient initialScreenings={screenings} />
-      </main>      
+      <Hero />      
+      <HomeClient initialScreenings={screenings} />
       <Footer />
     </>
   )
