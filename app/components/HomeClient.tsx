@@ -1,12 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Navbar from './Navbar'
 import FilterBar from './FilterBar'
-import Hero from './Hero'
 import DaySection from './DaySection'
-import Footer from './Footer'
-
 import { Screening } from '@/lib/db' 
 
 interface HomeClientProps {
@@ -56,13 +52,10 @@ export default function HomeClient({ initialScreenings }: HomeClientProps) {
   const todayStr = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 font-sans">
-      <Navbar />      
+    <div className="min-h-screen bg-white text-neutral-900 font-sans">    
       
-      {selectedCinema === 'all' && selectedMovie === 'all' && (
-        <Hero movies={screenings} />
-      )}
-
+      {selectedCinema === 'all' && selectedMovie === 'all'}
+      
       <FilterBar 
         cinemas={uniqueCinemas} 
         movies={uniqueMovies} 
@@ -89,8 +82,6 @@ export default function HomeClient({ initialScreenings }: HomeClientProps) {
           ))
         )}
       </main>
-
-      <Footer />
     </div>
   )
 }

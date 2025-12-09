@@ -1,3 +1,4 @@
+import 'server-only';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { movies, screenings, rooms, cinemas } from './schema';
@@ -43,6 +44,7 @@ export interface Movie {
   tmdb_id: number | null;
   director: string | null;
   country: string | null;
+  isFeatured: boolean | null;
 }
 
 // --- FUNCIONES ---
@@ -118,6 +120,7 @@ export async function getMovieById(id: string | number): Promise<Movie | null> {
     tmdb_id: movies.tmdbId,
     director: movies.director,
     country: movies.country,
+    isFeatured: movies.isFeatured,
   })
   .from(movies)
   .where(eq(movies.id, Number(id)))
@@ -185,4 +188,24 @@ export async function getScreeningById(id: string | number): Promise<Screening |
   .limit(1);
 
   return result[0] || null;
+}
+
+// Ahora devolvemos Promise<Movie[]> y mapeamos los campos correctamente
+export async function getFeaturedMovies(): Promise<Movie[]> {
+  return await db.select({
+    id: movies.id,
+    title: movies.title,
+    poster: movies.posterUrl,       // <--- Mapeo a 'poster'
+    overview: movies.synopsis,      // <--- Mapeo a 'overview'
+    rating: movies.rating,
+    duration: movies.durationMinutes, // <--- Mapeo a 'duration'
+    vote_average: movies.voteAverage, // <--- Mapeo a 'vote_average'
+    tmdb_id: movies.tmdbId,
+    director: movies.director,
+    country: movies.country,
+    isFeatured: movies.isFeatured,
+  })
+    .from(movies)
+    .where(eq(movies.isFeatured, true))
+    .limit(10);
 }
