@@ -3,6 +3,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { movies, screenings, rooms, cinemas } from './schema';
 import { eq, and, gte, asc, sql, ilike } from 'drizzle-orm';
+import { cache } from 'react';
 
 // --- CONFIG ---
 const pool = new Pool({
@@ -108,7 +109,7 @@ export async function getScreeningsByCinema(cinemaName: string): Promise<Screeni
   .orderBy(asc(screenings.date), asc(screenings.time));
 }
 
-export async function getMovieById(id: string | number): Promise<Movie | null> {
+export const getMovieById = cache(async (id: string | number): Promise<Movie | null> => {
   const result = await db.select({
     id: movies.id,
     title: movies.title,
@@ -127,7 +128,7 @@ export async function getMovieById(id: string | number): Promise<Movie | null> {
   .limit(1);
 
   return result[0] || null;
-}
+});
 
 export async function getScreeningsByMovieId(movieId: string | number): Promise<Screening[]> {
   return await db.select({
@@ -161,7 +162,7 @@ export async function getScreeningsByMovieId(movieId: string | number): Promise<
   .orderBy(asc(screenings.date), asc(screenings.time));
 }
 
-export async function getScreeningById(id: string | number): Promise<Screening | null> {
+export const getScreeningById = cache(async (id: string | number): Promise<Screening | null> => {
   const result = await db.select({
     id: screenings.id,
     movie_id: movies.id,
@@ -188,18 +189,17 @@ export async function getScreeningById(id: string | number): Promise<Screening |
   .limit(1);
 
   return result[0] || null;
-}
+});
 
-// Ahora devolvemos Promise<Movie[]> y mapeamos los campos correctamente
 export async function getFeaturedMovies(): Promise<Movie[]> {
   return await db.select({
     id: movies.id,
     title: movies.title,
-    poster: movies.posterUrl,       // <--- Mapeo a 'poster'
-    overview: movies.synopsis,      // <--- Mapeo a 'overview'
+    poster: movies.posterUrl,
+    overview: movies.synopsis,
     rating: movies.rating,
-    duration: movies.durationMinutes, // <--- Mapeo a 'duration'
-    vote_average: movies.voteAverage, // <--- Mapeo a 'vote_average'
+    duration: movies.durationMinutes,
+    vote_average: movies.voteAverage,
     tmdb_id: movies.tmdbId,
     director: movies.director,
     country: movies.country,
