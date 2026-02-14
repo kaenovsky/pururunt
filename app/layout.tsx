@@ -16,8 +16,8 @@ const logoFont = Marck_Script({
 
 export const metadata: Metadata = {
   
-  title: "foquito.ar | Cartelera de Cine Arte",
-  description: "Cartelera unificada de cine arte, ciclos especiales y películas independientes en Buenos Aires. Tu foco en el cine de calidad.",
+  title: "foquito.ar | Cines chiquitos de CABA",
+  description: "Cartelera de cines alternativos en la Ciudad de Buenos Aires. Pelis de autor, cine nacional, ciclos y festivales.",
   
   
   metadataBase: new URL('https://foquito.ar'),
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
 
   
   openGraph: {
-    title: 'foquito.ar | Cine Arte en Buenos Aires',
-    description: 'Cartelera unificada de cine arte, ciclos especiales y películas independientes en Buenos Aires.',
+    title: 'foquito.ar | Cines chiquitos de CABA',
+    description: 'Cartelera de cines alternativos en la Ciudad de Buenos Aires. Pelis de autor, cine nacional, ciclos y festivales.',
     url: 'https://foquito.ar',
     siteName: 'foquito.ar',
     type: 'website',
@@ -41,19 +41,19 @@ export const metadata: Metadata = {
   
     images: [
       {
-        url: '/og-image.jpg',
-        width: 1200,
+        url: '/og-image.png',
+        width: 1000,
         height: 630,
-        alt: 'Cinema room with vintage film projectors',
+        alt: 'brand design logo with cinema room in the background',
       },
     ],
   },
   
   twitter: {
     card: 'summary_large_image',
-    title: 'foquito.ar | Cartelera de Cine Arte',
-    description: 'foco en el cine de Buenos Aires.',
-    images: ['/og-image.jpg'], 
+    title: 'foquito.ar | Cines chiquitos de CABA',
+    description: 'Cartelera de cines alternativos en la Ciudad de Buenos Aires. Pelis de autor, cine nacional, ciclos y festivales.',
+    images: ['/og-image.png'], 
   },
 };
 
