@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Marck_Script } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 const montserrat = Montserrat({ 
   subsets: ["latin"],
@@ -66,6 +67,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${montserrat.variable} ${logoFont.variable} font-sans bg-background text-foreground antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
