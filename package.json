@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
-    "bcryptjs": "^3.0.3",
     "drizzle-kit": "^0.18.1",
     "drizzle-orm": "^0.44.7",
     "framer-motion": "^12.23.25",
@@ -24,7 +23,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/pg": "^8.15.6",
     "@types/react": "^19",

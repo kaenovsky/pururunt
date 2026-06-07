@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { auth, signOut } from '@/auth'
-import { redirect } from 'next/navigation'
 import { Film, Building2, Calendar, LayoutDashboard, LogOut } from 'lucide-react'
 
 const navItems = [
@@ -12,7 +11,10 @@ const navItems = [
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
-  if (!session) redirect('/admin/login')
+
+  // Login page lives inside this layout but renders its own full-page UI.
+  // Proxy handles redirecting unauthenticated requests away from everything else.
+  if (!session) return <>{children}</>
 
   return (
     <div className="min-h-screen flex bg-neutral-100">
