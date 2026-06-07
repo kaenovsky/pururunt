@@ -1,8 +1,9 @@
 import { getCinemaById, getRoomsByCinema } from '@/lib/db'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Trash2, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { updateCinemaAction, addRoomAction, deleteRoomAction } from '../actions'
+import DeleteButton from '@/app/admin/components/DeleteButton'
 
 export default async function EditCinemaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -59,26 +60,21 @@ export default async function EditCinemaPage({ params }: { params: Promise<{ id:
             <table className="w-full text-sm">
               <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
-                  <th className="text-left px-4 py-2 font-semibold text-neutral-600">Number</th>
-                  <th className="text-left px-4 py-2 font-semibold text-neutral-600">Name</th>
+                  <th className="text-left px-4 py-2 font-semibold text-neutral-600">Room</th>
                   <th className="px-4 py-2" />
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
                 {rooms.map((room) => (
                   <tr key={room.id} className="hover:bg-neutral-50">
-                    <td className="px-4 py-2 text-neutral-700">{room.number ?? '—'}</td>
-                    <td className="px-4 py-2 text-neutral-700">{room.name ?? '—'}</td>
-                    <td className="px-4 py-2">
-                      <form action={deleteRoomAction.bind(null, numId, room.id)} className="flex justify-end">
-                        <button
-                          type="submit"
-                          className="p-1.5 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                          onClick={(e) => { if (!confirm('Delete this room?')) e.preventDefault() }}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </form>
+                    <td className="px-4 py-2 text-neutral-700">
+                      {room.number ? `Room ${room.number}` : `Room #${room.id}`}
+                    </td>
+                    <td className="px-4 py-2 flex justify-end">
+                      <DeleteButton
+                        action={deleteRoomAction.bind(null, numId, room.id)}
+                        confirm="Delete this room?"
+                      />
                     </td>
                   </tr>
                 ))}
@@ -91,10 +87,6 @@ export default async function EditCinemaPage({ params }: { params: Promise<{ id:
           <div className="flex-1">
             <label className="form-label" htmlFor="number">Room number</label>
             <input id="number" name="number" placeholder="1" className="form-input" />
-          </div>
-          <div className="flex-1">
-            <label className="form-label" htmlFor="name">Room name</label>
-            <input id="name" name="name" placeholder="Sala principal" className="form-input" />
           </div>
           <button type="submit"
             className="inline-flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-neutral-700 transition-colors whitespace-nowrap">

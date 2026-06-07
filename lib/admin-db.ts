@@ -58,7 +58,6 @@ export async function deleteCinema(id: number) {
 
 export interface CreateRoomInput {
   cinemaId: number
-  name?: string | null
   number?: string | null
 }
 

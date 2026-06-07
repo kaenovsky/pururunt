@@ -60,7 +60,6 @@ const cinemaColumns = {
 const roomColumns = {
   id: rooms.id,
   cinemaId: rooms.cinemaId,
-  name: rooms.name,
   number: rooms.number,
 };
 

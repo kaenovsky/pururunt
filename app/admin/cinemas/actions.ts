@@ -22,13 +22,8 @@ export async function createCinemaAction(formData: FormData) {
   })
 
   const roomNumber = (formData.get('roomNumber') as string)?.trim()
-  const roomName   = (formData.get('roomName')   as string)?.trim()
-  if (roomNumber || roomName) {
-    await createRoom({
-      cinemaId: cinema.id,
-      number:   roomNumber || null,
-      name:     roomName   || null,
-    })
+  if (roomNumber) {
+    await createRoom({ cinemaId: cinema.id, number: roomNumber })
   }
 
   revalidatePath('/admin/cinemas')
@@ -61,7 +56,6 @@ export async function addRoomAction(cinemaId: number, formData: FormData) {
   await createRoom({
     cinemaId,
     number: (formData.get('number') as string) || null,
-    name:   (formData.get('name')   as string) || null,
   })
 
   revalidatePath(`/admin/cinemas/${cinemaId}`)

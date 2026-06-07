@@ -43,7 +43,6 @@ export interface Cinema {
 export interface Room {
   id: number;
   cinemaId: number | null;
-  name: string | null;
   number: string | null;
 }
 

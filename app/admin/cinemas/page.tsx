@@ -1,7 +1,8 @@
 import { getCinemas, getRoomsByCinema } from '@/lib/db'
 import Link from 'next/link'
 import { deleteCinemaAction } from './actions'
-import { Pencil, Trash2, Plus } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
+import DeleteButton from '@/app/admin/components/DeleteButton'
 
 export default async function AdminCinemasPage() {
   const cinemas = await getCinemas()
@@ -13,7 +14,10 @@ export default async function AdminCinemasPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-neutral-900">Cinemas</h1>
-        <Link href="/admin/cinemas/new" className="inline-flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-neutral-700 transition-colors">
+        <Link
+          href="/admin/cinemas/new"
+          className="inline-flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-neutral-700 transition-colors"
+        >
           <Plus size={16} /> Add cinema
         </Link>
       </div>
@@ -42,18 +46,16 @@ export default async function AdminCinemasPage() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 justify-end">
-                    <Link href={`/admin/cinemas/${cinema.id}`} className="p-1.5 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 rounded transition-colors">
+                    <Link
+                      href={`/admin/cinemas/${cinema.id}`}
+                      className="p-1.5 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 rounded transition-colors"
+                    >
                       <Pencil size={15} />
                     </Link>
-                    <form action={deleteCinemaAction.bind(null, cinema.id)}>
-                      <button
-                        type="submit"
-                        className="p-1.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                        onClick={(e) => { if (!confirm(`Delete "${cinema.name}"?`)) e.preventDefault() }}
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </form>
+                    <DeleteButton
+                      action={deleteCinemaAction.bind(null, cinema.id)}
+                      confirm={`Delete "${cinema.name}"? This will also delete all its rooms.`}
+                    />
                   </div>
                 </td>
               </tr>

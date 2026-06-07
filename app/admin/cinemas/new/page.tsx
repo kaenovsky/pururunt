@@ -20,15 +20,9 @@ export default function NewCinemaPage() {
 
           <div className="sm:col-span-2">
             <p className="text-sm font-semibold text-neutral-700 mb-3">First room (optional)</p>
-            <div className="grid grid-cols-2 gap-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
-              <div>
-                <label className="form-label" htmlFor="roomNumber">Room number</label>
-                <input id="roomNumber" name="roomNumber" placeholder="1" className="form-input" />
-              </div>
-              <div>
-                <label className="form-label" htmlFor="roomName">Room name</label>
-                <input id="roomName" name="roomName" placeholder="Sala principal" className="form-input" />
-              </div>
+            <div className="max-w-xs">
+              <label className="form-label" htmlFor="roomNumber">Room number</label>
+              <input id="roomNumber" name="roomNumber" placeholder="1" className="form-input" />
             </div>
           </div>
         </div>

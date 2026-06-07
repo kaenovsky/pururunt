@@ -91,7 +91,7 @@ export default function ScreeningForm({
             </option>
             {rooms.map((r) => (
               <option key={r.id} value={r.id}>
-                {r.number ? `Room ${r.number}` : ''}{r.name ? ` — ${r.name}` : ''}
+                {r.number ? `Room ${r.number}` : `Room #${r.id}`}
               </option>
             ))}
           </select>

@@ -13,7 +13,6 @@ export const cinemas = pgTable('cinemas', {
 export const rooms = pgTable('rooms', {
   id: serial('id').primaryKey(),
   cinemaId: integer('cinema_id').references(() => cinemas.id),
-  name: text('name'),
   number: text('number'),
 });
 
