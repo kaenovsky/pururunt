@@ -1,7 +1,5 @@
-import { pgTable, serial, text, integer, decimal, timestamp, date, time, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, decimal, date, time, boolean } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-
-// --- TABLAS ---
 
 export const cinemas = pgTable('cinemas', {
   id: serial('id').primaryKey(),
@@ -13,7 +11,6 @@ export const cinemas = pgTable('cinemas', {
 export const rooms = pgTable('rooms', {
   id: serial('id').primaryKey(),
   cinemaId: integer('cinema_id').references(() => cinemas.id),
-  name: text('name'),
   number: text('number'),
 });
 
@@ -39,8 +36,6 @@ export const screenings = pgTable('screenings', {
   time: time('time').notNull(), // HH:MM:SS string
   projectionFormat: text('projection_format'),
 });
-
-// --- RELACIONES ---
 
 export const screeningsRelations = relations(screenings, ({ one }) => ({
   movie: one(movies, {

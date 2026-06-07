@@ -3,25 +3,10 @@ import { useState } from 'react'
 import { getCalendarUrlsFromScreening, getLetterboxdUrl, formatDayInSpanish } from '@/lib/calendar-url'
 import { Calendar, Mail, Link as LinkIcon, Download, Check, ExternalLink, Clock, Film } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-interface ScreeningData {
-    id: number;
-    title: string;
-    date: string; // "YYYY-MM-DD"
-    time: string; // "HH:MM"
-    duration?: number | null;
-    cinema: string;
-    room?: string | null;
-    rating?: string | null;
-    format?: string | null;
-    overview?: string | null;
-    director?: string | null;
-    country?: string | null;
-    tmdb_id?: number | null;
-}
+import type { Screening } from '@/lib/types'
 
 interface AddToCalendarModalProps {
-    screening: ScreeningData;
+    screening: Screening;
     isOpen: boolean;
     onClose: () => void;
 }

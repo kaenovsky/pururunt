@@ -2,19 +2,9 @@ import { getFeaturedMovies } from '@/lib/db'
 import { Star, Clock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-interface MovieData {
-  id: number;
-  title: string;
-  poster: string | null;
-  vote_average: string | number | null;
-  duration: number | null;
-  director: string | null;
-  overview?: string | null;
-}
-
 export default async function Hero() {
-  
-  const featuredMovies = await getFeaturedMovies() as MovieData[];
+
+  const featuredMovies = await getFeaturedMovies();
   
   const movie = featuredMovies.find(m => m.poster); 
 

@@ -1,31 +1,15 @@
 'use client'
 import { useState, ReactNode } from 'react'
 import dynamic from 'next/dynamic';
+import type { Screening } from '@/lib/types'
 
-const AddToCalendarModal = dynamic(() => import('./AddToCalendarModal'), { 
-    ssr: false 
+const AddToCalendarModal = dynamic(() => import('./AddToCalendarModal'), {
+    ssr: false
   });
 
-interface ScreeningData {
-    id: number;
-    title: string;
-    date: string;
-    time: string;
-    duration?: number | null;
-    cinema: string;
-    room?: string | null;
-    rating?: string | null;
-    format?: string | null;
-    overview?: string | null;
-    tmdb_id?: number | null;
-    poster?: string | null;
-    vote_average?: number | null;
-    movie_id?: number;
-}
-
 interface ScreeningModalTriggerProps {
-    screening: ScreeningData;
-    children: ReactNode; 
+    screening: Screening;
+    children: ReactNode;
 }
 
 export default function ScreeningModalTrigger({ screening, children }: ScreeningModalTriggerProps) {
