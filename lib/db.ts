@@ -13,8 +13,6 @@ const pool = new Pool({
 
 export const db = drizzle(pool);
 
-// --- SHARED COLUMN MAPS ---
-
 const screeningColumns = {
   id: screenings.id,
   movie_id: movies.id,
@@ -63,7 +61,7 @@ const roomColumns = {
   number: rooms.number,
 };
 
-// --- SCREENINGS ---
+
 
 export interface ScreeningFilters {
   cinema?: string;
@@ -136,7 +134,7 @@ export const getScreeningById = cache(async (id: string | number): Promise<Scree
   return result[0] ?? null;
 });
 
-// --- MOVIES ---
+
 
 export interface MovieFilters {
   featured?: boolean;
@@ -189,7 +187,7 @@ export async function getFeaturedMovies(): Promise<Movie[]> {
     .limit(10);
 }
 
-// --- CINEMAS ---
+
 
 export async function getCinemas(): Promise<Cinema[]> {
   return db
@@ -208,7 +206,7 @@ export const getCinemaById = cache(async (id: string | number): Promise<Cinema |
   return result[0] ?? null;
 });
 
-// --- ROOMS ---
+
 
 export async function getRoomsByCinema(cinemaId: string | number): Promise<Room[]> {
   return db

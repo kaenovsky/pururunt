@@ -1,14 +1,9 @@
 'use server'
-import { auth } from '@/auth'
 import { createScreening, updateScreening, deleteScreening } from '@/lib/admin-db'
 import { getRoomsByCinema } from '@/lib/db'
+import { requireAuth } from '@/lib/require-auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-
-async function requireAuth() {
-  const session = await auth()
-  if (!session) throw new Error('Unauthorized')
-}
 
 export async function createScreeningAction(formData: FormData) {
   await requireAuth()
