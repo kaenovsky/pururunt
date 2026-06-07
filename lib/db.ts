@@ -2,7 +2,7 @@ import 'server-only';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { movies, screenings, rooms, cinemas } from './schema';
-import { eq, and, gte, asc, sql, ilike } from 'drizzle-orm';
+import { eq, and, gte, asc, sql, ilike, count } from 'drizzle-orm';
 import { cache } from 'react';
 import type { Screening, Movie, Cinema, Room } from './types';
 
@@ -26,7 +26,9 @@ const screeningColumns = {
   vote_average: movies.voteAverage,
   tmdb_id: movies.tmdbId,
   cinema: cinemas.name,
+  cinema_id: cinemas.id,
   room: rooms.number,
+  room_id: rooms.id,
   date: screenings.date,
   time: sql<string>`to_char(${screenings.time}, 'HH24:MI')`,
   format: screenings.projectionFormat,
@@ -65,18 +67,23 @@ const roomColumns = {
 // --- SCREENINGS ---
 
 export interface ScreeningFilters {
-  cinema?: string;   // partial name match
-  cinemaId?: number; // exact ID
+  cinema?: string;
+  cinemaId?: number;
   movieId?: number;
-  date?: string;     // YYYY-MM-DD; omit to default to upcoming (≥ today)
+  date?: string;        // YYYY-MM-DD; omit to default to upcoming (≥ today)
+  includePast?: boolean; // skip the CURRENT_DATE lower bound
+  limit?: number;
+  offset?: number;
 }
 
 export async function getScreenings(filters?: ScreeningFilters): Promise<Screening[]> {
   const dateCond = filters?.date
     ? eq(screenings.date, filters.date)
-    : gte(screenings.date, sql`CURRENT_DATE`);
+    : filters?.includePast
+      ? undefined
+      : gte(screenings.date, sql`CURRENT_DATE`);
 
-  return db
+  const q = db
     .select(screeningColumns)
     .from(screenings)
     .innerJoin(movies, eq(screenings.movieId, movies.id))
@@ -89,6 +96,33 @@ export async function getScreenings(filters?: ScreeningFilters): Promise<Screeni
       filters?.movieId  ? eq(screenings.movieId, filters.movieId) : undefined,
     ))
     .orderBy(asc(screenings.date), asc(screenings.time), asc(cinemas.name));
+
+  if (filters?.limit !== undefined) {
+    return q.limit(filters.limit).offset(filters.offset ?? 0);
+  }
+  return q;
+}
+
+export async function getScreeningsCount(filters?: Omit<ScreeningFilters, 'limit' | 'offset'>): Promise<number> {
+  const dateCond = filters?.date
+    ? eq(screenings.date, filters.date)
+    : filters?.includePast
+      ? undefined
+      : gte(screenings.date, sql`CURRENT_DATE`);
+
+  const result = await db
+    .select({ value: count() })
+    .from(screenings)
+    .innerJoin(movies, eq(screenings.movieId, movies.id))
+    .innerJoin(rooms, eq(screenings.roomId, rooms.id))
+    .innerJoin(cinemas, eq(rooms.cinemaId, cinemas.id))
+    .where(and(
+      dateCond,
+      filters?.cinemaId ? eq(cinemas.id, filters.cinemaId) : undefined,
+      filters?.cinema   ? ilike(cinemas.name, `%${filters.cinema}%`) : undefined,
+      filters?.movieId  ? eq(screenings.movieId, filters.movieId) : undefined,
+    ));
+  return result[0].value;
 }
 
 export const getScreeningById = cache(async (id: string | number): Promise<Screening | null> => {
@@ -108,10 +142,12 @@ export const getScreeningById = cache(async (id: string | number): Promise<Scree
 export interface MovieFilters {
   featured?: boolean;
   search?: string;
+  limit?: number;
+  offset?: number;
 }
 
 export async function getMovies(filters?: MovieFilters): Promise<Movie[]> {
-  return db
+  const q = db
     .select(movieColumns)
     .from(movies)
     .where(and(
@@ -119,6 +155,22 @@ export async function getMovies(filters?: MovieFilters): Promise<Movie[]> {
       filters?.search ? ilike(movies.title, `%${filters.search}%`) : undefined,
     ))
     .orderBy(asc(movies.title));
+
+  if (filters?.limit !== undefined) {
+    return q.limit(filters.limit).offset(filters.offset ?? 0);
+  }
+  return q;
+}
+
+export async function getMoviesCount(filters?: Pick<MovieFilters, 'featured' | 'search'>): Promise<number> {
+  const result = await db
+    .select({ value: count() })
+    .from(movies)
+    .where(and(
+      filters?.featured !== undefined ? eq(movies.isFeatured, filters.featured) : undefined,
+      filters?.search ? ilike(movies.title, `%${filters.search}%`) : undefined,
+    ));
+  return result[0].value;
 }
 
 export const getMovieById = cache(async (id: string | number): Promise<Movie | null> => {

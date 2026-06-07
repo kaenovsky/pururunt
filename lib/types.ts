@@ -9,7 +9,9 @@ export interface Screening {
   vote_average: string | null;
   tmdb_id: number | null;
   cinema: string;
+  cinema_id: number;
   room: string | null;
+  room_id: number | null;
   date: string;
   time: string;
   format: string | null;

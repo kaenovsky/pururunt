@@ -5,20 +5,30 @@ import { getRoomsForCinemaAction } from './actions'
 import Link from 'next/link'
 
 interface ScreeningFormProps {
-  cinemas:  Cinema[]
-  movies:   Movie[]
+  cinemas: Cinema[]
+  movies: Movie[]
   screening?: Screening
-  action:   (formData: FormData) => Promise<void>
+  action: (formData: FormData) => Promise<void>
   initialRooms?: Room[]
+  initialCinemaId?: number
 }
 
-export default function ScreeningForm({ cinemas, movies, screening, action, initialRooms = [] }: ScreeningFormProps) {
-  const [rooms, setRooms]       = useState<Room[]>(initialRooms)
-  const [roomId, setRoomId]     = useState<number | ''>(screening?.id ? (initialRooms[0]?.id ?? '') : '')
-  const [pending, startTransition] = useTransition()
+export default function ScreeningForm({
+  cinemas,
+  movies,
+  screening,
+  action,
+  initialRooms = [],
+  initialCinemaId,
+}: ScreeningFormProps) {
+  const [selectedCinemaId, setSelectedCinemaId] = useState<number | ''>(initialCinemaId ?? '')
+  const [rooms, setRooms]                       = useState<Room[]>(initialRooms)
+  const [roomId, setRoomId]                     = useState<number | ''>(screening?.room_id ?? '')
+  const [pending, startTransition]              = useTransition()
 
   function handleCinemaChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const cinemaId = Number(e.target.value)
+    setSelectedCinemaId(cinemaId || '')
     setRooms([])
     setRoomId('')
 
@@ -48,8 +58,14 @@ export default function ScreeningForm({ cinemas, movies, screening, action, init
 
         <div>
           <label className="form-label" htmlFor="cinema">Cinema *</label>
-          <select id="cinema" name="cinema" required onChange={handleCinemaChange}
-            className="form-input">
+          <select
+            id="cinema"
+            name="cinema"
+            required
+            value={selectedCinemaId}
+            onChange={handleCinemaChange}
+            className="form-input"
+          >
             <option value="">Select a cinema…</option>
             {cinemas.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
