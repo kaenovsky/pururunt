@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import FilterBar from './FilterBar'
 import DaySection from './DaySection'
-import { Screening } from '@/lib/db' 
+import type { Screening } from '@/lib/types'
 
 interface HomeClientProps {
   initialScreenings: Screening[];

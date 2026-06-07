@@ -4,34 +4,14 @@ import Link from 'next/link'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import { notFound } from 'next/navigation'
-
-import ScreeningModalTrigger from '@/app/components/ScreeningModalTrigger'; 
+import ScreeningModalTrigger from '@/app/components/ScreeningModalTrigger'
 
 export const revalidate = 3600
 
-interface ScreeningData {
-  id: number;
-  title: string;
-  date: string;
-  time: string;
-  duration?: number | null;
-  cinema: string;
-  room?: string | null;
-  rating?: string | null;
-  format?: string | null;
-  overview?: string | null;
-  tmdb_id?: number | null;
-  poster?: string | null;
-  vote_average?: number | null;
-  movie_id?: number;
-  director?: string | null;
-  country?: string | null;
-}
-
 export default async function ScreeningPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  
-  const screening = await getScreeningById(id) as ScreeningData | null
+
+  const screening = await getScreeningById(id)
 
   if (!screening) {
     notFound()

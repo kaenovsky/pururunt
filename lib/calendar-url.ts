@@ -45,7 +45,9 @@ interface CalendarEventData {
   }
   
   
-  export function getCalendarUrlsFromScreening(screening: any) {
+import type { Screening } from './types'
+
+  export function getCalendarUrlsFromScreening(screening: Screening) {
       const startString = `${screening.date}T${screening.time}:00-03:00`;
       const startTime = new Date(startString);
   

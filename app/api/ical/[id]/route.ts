@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { getScreeningById } from '../../../../lib/db'
+import type { Screening } from '../../../../lib/types'
 
 export async function GET(
   request: NextRequest,
@@ -36,7 +37,7 @@ export async function GET(
   }
 }
 
-function generateICalContent(screening: any): string {
+function generateICalContent(screening: Screening): string {
   // 1. CONSTRUCCIÓN DE FECHA
   // La DB nos da: date "2025-11-27" y time "22:30"
   // Forzamos la zona horaria de Argentina (-03:00) para que sea absoluto.

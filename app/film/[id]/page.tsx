@@ -1,4 +1,4 @@
-import { getMovieById, getScreeningsByMovieId } from '@/lib/db'
+import { getMovieById, getScreenings } from '@/lib/db'
 import { Clock, Star, Calendar, MapPin, ArrowLeft } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
@@ -12,7 +12,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
   
   const [movie, screenings] = await Promise.all([
     getMovieById(id),
-    getScreeningsByMovieId(id) 
+    getScreenings({ movieId: Number(id) })
   ])
 
   if (!movie) notFound()
