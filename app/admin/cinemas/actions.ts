@@ -48,10 +48,10 @@ export async function deleteCinemaAction(id: number) {
 export async function addRoomAction(cinemaId: number, formData: FormData) {
   await requireAuth()
 
-  await createRoom({
-    cinemaId,
-    number: (formData.get('number') as string) || null,
-  })
+  const number = (formData.get('number') as string)?.trim()
+  if (!number) throw new Error('Room number is required')
+
+  await createRoom({ cinemaId, number })
 
   revalidatePath(`/admin/cinemas/${cinemaId}`)
 }

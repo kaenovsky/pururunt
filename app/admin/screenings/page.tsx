@@ -1,6 +1,6 @@
-import { getScreenings, getScreeningsCount } from '@/lib/db'
+import { getScreenings, getScreeningsCount, getCinemas, getMovies } from '@/lib/db'
 import Link from 'next/link'
-import { deleteScreeningAction } from './actions'
+import { deleteScreeningAction, reassignMovieAction } from './actions'
 import { Pencil, Plus } from 'lucide-react'
 import DeleteButton from '@/app/admin/components/DeleteButton'
 
@@ -15,9 +15,11 @@ export default async function AdminScreeningsPage({
   const page = Math.max(1, Number(pageStr) || 1)
   const offset = (page - 1) * PAGE_SIZE
 
-  const [screenings, total] = await Promise.all([
+  const [screenings, total, cinemas, movies] = await Promise.all([
     getScreenings({ includePast: true, limit: PAGE_SIZE, offset }),
     getScreeningsCount({ includePast: true }),
+    getCinemas(),
+    getMovies(),
   ])
   const totalPages = Math.ceil(total / PAGE_SIZE)
 
@@ -41,6 +43,41 @@ export default async function AdminScreeningsPage({
           <Plus size={16} /> Add screening
         </Link>
       </div>
+
+      <details className="mb-6 bg-white rounded-xl border border-neutral-200">
+        <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-neutral-700">
+          Reassign movie in bulk
+        </summary>
+        <form action={reassignMovieAction} className="p-4 pt-0 grid grid-cols-1 sm:grid-cols-4 gap-3 sm:items-end">
+          <div>
+            <label className="form-label" htmlFor="cinemaId">Cinema</label>
+            <select id="cinemaId" name="cinemaId" required defaultValue="" className="form-input">
+              <option value="" disabled>Select…</option>
+              {cinemas.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="form-label" htmlFor="fromMovieId">From film</label>
+            <select id="fromMovieId" name="fromMovieId" required defaultValue="" className="form-input">
+              <option value="" disabled>Select…</option>
+              {movies.map((m) => <option key={m.id} value={m.id}>{m.title}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="form-label" htmlFor="toMovieId">To film</label>
+            <select id="toMovieId" name="toMovieId" required defaultValue="" className="form-input">
+              <option value="" disabled>Select…</option>
+              {movies.map((m) => <option key={m.id} value={m.id}>{m.title}</option>)}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="bg-neutral-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-neutral-700 transition-colors"
+          >
+            Reassign all screenings
+          </button>
+        </form>
+      </details>
 
       <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
         <table className="w-full text-sm">

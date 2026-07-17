@@ -31,12 +31,14 @@ export interface Movie {
   director: string | null;
   country: string | null;
   isFeatured: boolean | null;
+  manualEdit: boolean | null;
 }
 
 export interface Cinema {
   id: number;
   name: string;
   address: string | null;
+  websiteUrl: string | null;
   active: boolean | null;
 }
 

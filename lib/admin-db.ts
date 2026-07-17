@@ -1,7 +1,7 @@
 import 'server-only'
 import { db } from './db'
 import { movies, screenings, cinemas, rooms } from './schema'
-import { eq } from 'drizzle-orm'
+import { eq, and, inArray } from 'drizzle-orm'
 
 // --- FILMS ---
 
@@ -16,6 +16,7 @@ export interface CreateMovieInput {
   director?: string | null
   country?: string | null
   isFeatured?: boolean
+  manualEdit?: boolean
 }
 
 export async function createMovie(data: CreateMovieInput) {
@@ -58,7 +59,7 @@ export async function deleteCinema(id: number) {
 
 export interface CreateRoomInput {
   cinemaId: number
-  number?: string | null
+  number: string
 }
 
 export async function createRoom(data: CreateRoomInput) {
@@ -97,4 +98,24 @@ export async function updateScreening(id: number, data: Partial<CreateScreeningI
 
 export async function deleteScreening(id: number) {
   await db.delete(screenings).where(eq(screenings.id, id))
+}
+
+export async function deleteScreeningsByIds(ids: number[]) {
+  if (ids.length === 0) return
+  await db.delete(screenings).where(inArray(screenings.id, ids))
+}
+
+// Bulk-reassigns every screening of `fromMovieId` at `cinemaId` to `toMovieId`.
+// Used to merge scraper-created duplicates and to fix title drift across re-scrapes.
+export async function reassignScreeningsMovie(cinemaId: number, fromMovieId: number, toMovieId: number) {
+  const cinemaRooms = await db.select({ id: rooms.id }).from(rooms).where(eq(rooms.cinemaId, cinemaId))
+  const roomIds = cinemaRooms.map((r) => r.id)
+  if (roomIds.length === 0) return 0
+
+  const result = await db.update(screenings)
+    .set({ movieId: toMovieId })
+    .where(and(eq(screenings.movieId, fromMovieId), inArray(screenings.roomId, roomIds)))
+    .returning({ id: screenings.id })
+
+  return result.length
 }
