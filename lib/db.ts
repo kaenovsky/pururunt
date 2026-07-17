@@ -2,9 +2,9 @@ import 'server-only';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { movies, screenings, rooms, cinemas } from './schema';
-import { eq, and, gte, asc, sql, ilike, count } from 'drizzle-orm';
+import { eq, and, gte, asc, sql, ilike, count, isNotNull, ne } from 'drizzle-orm';
 import { cache } from 'react';
-import type { Screening, Movie, Cinema, Room } from './types';
+import type { Screening, Movie, Cinema, Room, ArchivedMovie } from './types';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -216,4 +216,35 @@ export async function getRoomsByCinema(cinemaId: string | number): Promise<Room[
     .from(rooms)
     .where(eq(rooms.cinemaId, Number(cinemaId)))
     .orderBy(asc(rooms.number));
+}
+
+
+
+export interface ArchivedMoviesFilters {
+  limit: number;
+  offset: number;
+}
+
+// Every movie that ever had a screening (past or future), with a poster — grouped by
+// the month of its first screening on the /films archive page. Unlike getMovies(), this
+// intentionally doesn't filter by date: it's a historical record, not the live cartelera.
+export async function getArchivedMovies({ limit, offset }: ArchivedMoviesFilters): Promise<ArchivedMovie[]> {
+  return db
+    .select({
+      ...movieColumns,
+      firstScreeningDate: sql<string>`min(${screenings.date})`,
+      cinemas: sql<string[]>`array_agg(distinct ${cinemas.name} order by ${cinemas.name})`,
+    })
+    .from(movies)
+    .innerJoin(screenings, eq(screenings.movieId, movies.id))
+    .innerJoin(rooms, eq(screenings.roomId, rooms.id))
+    .innerJoin(cinemas, eq(rooms.cinemaId, cinemas.id))
+    .where(and(
+      isNotNull(movies.posterUrl),
+      ne(movies.posterUrl, ''),
+    ))
+    .groupBy(movies.id)
+    .orderBy(sql`min(${screenings.date}) desc`)
+    .limit(limit)
+    .offset(offset);
 }
