@@ -21,6 +21,7 @@ export async function createFilmAction(formData: FormData) {
     tmdbId:          formData.get('tmdbId')      ? Number(formData.get('tmdbId'))      : null,
     voteAverage:     (formData.get('voteAverage') as string) || null,
     isFeatured:      formData.get('isFeatured') === 'on',
+    manualEdit:      true,
   })
 
   revalidatePath('/admin/films')
@@ -42,6 +43,7 @@ export async function updateFilmAction(id: number, formData: FormData) {
     tmdbId:          formData.get('tmdbId')       ? Number(formData.get('tmdbId'))      : null,
     voteAverage:     (formData.get('voteAverage') as string) || null,
     isFeatured:      formData.get('isFeatured') === 'on',
+    manualEdit:      true,
   })
 
   revalidatePath('/admin/films')

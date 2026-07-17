@@ -46,12 +46,14 @@ const movieColumns = {
   director: movies.director,
   country: movies.country,
   isFeatured: movies.isFeatured,
+  manualEdit: movies.manualEdit,
 };
 
 const cinemaColumns = {
   id: cinemas.id,
   name: cinemas.name,
   address: cinemas.address,
+  websiteUrl: cinemas.websiteUrl,
   active: cinemas.active,
 };
 

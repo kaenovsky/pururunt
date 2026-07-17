@@ -1,5 +1,5 @@
 'use server'
-import { createScreening, updateScreening, deleteScreening } from '@/lib/admin-db'
+import { createScreening, updateScreening, deleteScreening, reassignScreeningsMovie } from '@/lib/admin-db'
 import { getRoomsByCinema } from '@/lib/db'
 import { requireAuth } from '@/lib/require-auth'
 import { revalidatePath } from 'next/cache'
@@ -48,4 +48,21 @@ export async function deleteScreeningAction(id: number) {
 export async function getRoomsForCinemaAction(cinemaId: number) {
   await requireAuth()
   return getRoomsByCinema(cinemaId)
+}
+
+export async function reassignMovieAction(formData: FormData) {
+  await requireAuth()
+
+  const cinemaId    = Number(formData.get('cinemaId'))
+  const fromMovieId = Number(formData.get('fromMovieId'))
+  const toMovieId   = Number(formData.get('toMovieId'))
+
+  if (!cinemaId || !fromMovieId || !toMovieId) throw new Error('Cinema, from film and to film are required')
+  if (fromMovieId === toMovieId) throw new Error('Pick two different films')
+
+  await reassignScreeningsMovie(cinemaId, fromMovieId, toMovieId)
+
+  revalidatePath('/admin/screenings')
+  revalidatePath('/')
+  redirect('/admin/screenings')
 }

@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { auth, signOut } from '@/auth'
-import { Film, Building2, Calendar, LayoutDashboard, LogOut } from 'lucide-react'
+import { Film, Building2, Calendar, LayoutDashboard, LogOut, RefreshCw } from 'lucide-react'
 
 const navItems = [
   { href: '/admin',            label: 'Dashboard',  icon: LayoutDashboard },
   { href: '/admin/films',      label: 'Films',      icon: Film },
   { href: '/admin/cinemas',    label: 'Cinemas',    icon: Building2 },
   { href: '/admin/screenings', label: 'Screenings', icon: Calendar },
+  { href: '/admin/scrapers',   label: 'Scrapers',   icon: RefreshCw },
 ]
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
