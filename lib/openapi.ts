@@ -41,6 +41,29 @@ const movieSchema = {
   required: ['id', 'title'],
 };
 
+const archivedFilmSchema = {
+  allOf: [
+    { $ref: '#/components/schemas/Film' },
+    {
+      type: 'object',
+      properties: {
+        firstScreeningDate: { type: 'string', format: 'date', description: 'Date of the earliest recorded screening for this film' },
+        cinemas:            { type: 'array', items: { type: 'string' }, description: 'Cinemas where this film has screened' },
+      },
+      required: ['firstScreeningDate', 'cinemas'],
+    },
+  ],
+};
+
+const archivedFilmsPageSchema = {
+  type: 'object',
+  properties: {
+    films:   { type: 'array', items: { $ref: '#/components/schemas/ArchivedFilm' } },
+    hasMore: { type: 'boolean', description: 'Whether more films are available at the next offset' },
+  },
+  required: ['films', 'hasMore'],
+};
+
 const roomSchema = {
   type: 'object',
   properties: {
@@ -202,6 +225,35 @@ export const openApiSpec = {
       },
     },
 
+    '/api/films/archive': {
+      get: {
+        tags: ['Films'],
+        summary: 'List every film that has ever screened (paginated)',
+        description:
+          'Historical archive used by the /films page: every film with a poster that has had at least ' +
+          'one screening (past or future), ordered by the date of its earliest screening (most recent first).',
+        parameters: [
+          {
+            name: 'limit', in: 'query', required: false,
+            description: 'Page size (max 48, default 24).',
+            schema: { type: 'integer', example: 24 },
+          },
+          {
+            name: 'offset', in: 'query', required: false,
+            description: 'Number of films to skip.',
+            schema: { type: 'integer', example: 0 },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'A page of the film archive',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/ArchivedFilmsPage' } } },
+          },
+          ...errorResponses,
+        },
+      },
+    },
+
     '/api/films/{id}': {
       get: {
         tags: ['Films'],
@@ -306,12 +358,14 @@ export const openApiSpec = {
 
   components: {
     schemas: {
-      Screening:       screeningSchema,
-      Film:            movieSchema,
-      Cinema:          cinemaSchema,
-      Room:            roomSchema,
-      CinemaWithRooms: cinemaWithRoomsSchema,
-      Error:           errorSchema,
+      Screening:         screeningSchema,
+      Film:              movieSchema,
+      ArchivedFilm:      archivedFilmSchema,
+      ArchivedFilmsPage: archivedFilmsPageSchema,
+      Cinema:            cinemaSchema,
+      Room:              roomSchema,
+      CinemaWithRooms:   cinemaWithRoomsSchema,
+      Error:             errorSchema,
     },
   },
 };

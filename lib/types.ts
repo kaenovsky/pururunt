@@ -34,6 +34,11 @@ export interface Movie {
   manualEdit: boolean | null;
 }
 
+export interface ArchivedMovie extends Movie {
+  firstScreeningDate: string;
+  cinemas: string[];
+}
+
 export interface Cinema {
   id: number;
   name: string;
